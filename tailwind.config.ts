@@ -9,18 +9,18 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // Configuration personnalisée pour LeBazare
       colors: {
-        'beige-fond': '#F8F5F2',
-        'texte-principal': '#3A3A3A',
-        'accent': '#E27D60',
-        'accent-hover': '#D96C4E',
-      },
-      fontFamily: {
-        sans: ['var(--font-inter)', 'sans-serif'],
-        serif: ['var(--font-lora)', 'serif'],
+        primary: {
+          50: '#eff6ff',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+        }
       },
     },
   },
   plugins: [],
 }
+
 export default config

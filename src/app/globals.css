@@ -1,4 +1,63 @@
 /* path: src/app/globals.css */
+
+/* Directives Tailwind CSS v3 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Styles de base personnalisés pour LeBazare */
+@layer base {
+  /* Reset et styles globaux */
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply antialiased bg-gray-50 text-gray-900;
+  }
+  
+  /* Typography par défaut */
+  h1 {
+    @apply text-4xl font-bold;
+  }
+  
+  h2 {
+    @apply text-3xl font-semibold;
+  }
+  
+  h3 {
+    @apply text-2xl font-semibold;
+  }
+}
+
+/* Composants réutilisables */
+@layer components {
+  /* Bouton principal LeBazare */
+  .btn-primary {
+    @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200;
+  }
+  
+  /* Card produit */
+  .product-card {
+    @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200;
+  }
+}
+
+/* Utilities personnalisées */
+@layer utilities {
+  /* Animation de chargement */
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

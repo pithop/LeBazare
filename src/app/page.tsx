@@ -1,31 +1,65 @@
 // path: src/app/page.tsx
-import Link from 'next/link';
-
 export default function Home() {
   return (
-    <div>
-      {/* Section Héros */}
-      <section className="relative h-[60vh] flex items-center justify-center text-white bg-gray-800">
-        {/* Tu mettras une belle image de fond ici */}
-        <div className="absolute inset-0 bg-black opacity-40"></div>
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-serif font-bold">L'Art de l'Artisanat Marocain</h1>
-          <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto">
-            Des pièces uniques, confectionnées à la main, pour une décoration authentique et chaleureuse.
-          </p>
-          <Link href="/products" className="mt-8 inline-block bg-white text-gray-800 font-bold py-3 px-8 rounded-md hover:bg-gray-200 transition-transform hover:scale-105">
-            Découvrir la collection
-          </Link>
+    <main className="container mx-auto px-4 py-8">
+      {/* Header de test */}
+      <header className="mb-12">
+        <h1 className="text-5xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          LeBazare
+        </h1>
+        <p className="text-center text-gray-600 mt-2">
+          Si vous voyez ce texte stylisé, Tailwind fonctionne ! 🎉
+        </p>
+      </header>
+
+      {/* Grille de test des couleurs */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-semibold mb-4">Test des Couleurs</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-red-500 text-white p-6 rounded-lg text-center font-bold shadow-lg">
+            Rouge
+          </div>
+          <div className="bg-green-500 text-white p-6 rounded-lg text-center font-bold shadow-lg">
+            Vert
+          </div>
+          <div className="bg-blue-500 text-white p-6 rounded-lg text-center font-bold shadow-lg">
+            Bleu
+          </div>
+          <div className="bg-yellow-500 text-white p-6 rounded-lg text-center font-bold shadow-lg">
+            Jaune
+          </div>
         </div>
       </section>
 
-      {/* Section "À propos" simple */}
-      <section className="container mx-auto px-4 py-16 text-center">
-        <h2 className="text-3xl font-serif font-bold mb-4">Notre Philosophie</h2>
-        <p className="max-w-3xl mx-auto text-gray-600">
-          Chez Le Bazare, chaque objet raconte une histoire. Nous collaborons directement avec des artisans talentueux pour vous offrir des créations qui ont une âme, alliant tradition et design contemporain.
-        </p>
+      {/* Test des composants */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-semibold mb-4">Composants LeBazare</h2>
+        <div className="space-y-4">
+          {/* Card produit test */}
+          <div className="product-card p-6">
+            <h3 className="text-xl font-semibold mb-2">Produit Test</h3>
+            <p className="text-gray-600 mb-4">
+              Description du produit avec styles Tailwind
+            </p>
+            <button className="btn-primary">
+              Ajouter au panier
+            </button>
+          </div>
+          
+          {/* Test du responsive */}
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl">
+              Texte responsive (change selon la taille de l'écran)
+            </p>
+          </div>
+        </div>
       </section>
-    </div>
-  );
+
+      {/* Test des animations */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">Test Animation</h2>
+        <div className="h-20 animate-shimmer rounded-lg"></div>
+      </section>
+    </main>
+  )
 }

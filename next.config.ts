@@ -2,10 +2,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // On déplace la configuration Turbopack ici, au premier niveau
-  turbopack: {
-    // On indique explicitement que la racine du projet est le dossier actuel
-    root: __dirname,
+  // Désactiver temporairement Turbopack pour éviter les conflits
+  experimental: {
+    turbo: {}, // Désactiver Turbopack avec un objet vide
   },
   images: {
     remotePatterns: [
