@@ -37,7 +37,7 @@ async function main() {
   console.log(`👤 Administrateur "${admin.email}" créé ou mis à jour.`);
 
   // --- 2. Lecture du fichier JSON de produits ---
-  const productsPath = join(__dirname, '..', 'data', 'seed-products.json');
+  const productsPath = join(__dirname, 'seed-products.json');
   const productsFile = await readFile(productsPath, 'utf-8');
   const seedProducts: SeedProduct[] = JSON.parse(productsFile);
 

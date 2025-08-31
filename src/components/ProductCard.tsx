@@ -24,29 +24,30 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group block overflow-hidden border border-gray-200 rounded-lg shadow-sm transition-shadow hover:shadow-md"
+      className="group block overflow-hidden transition-all duration-300"
     >
-      <div className="relative h-64 w-full">
+      {/* Conteneur d'image avec un fond et un ratio fixe */}
+      <div className="relative aspect-square w-full bg-gray-100 rounded-lg overflow-hidden">
         {firstImage ? (
           <Image
             src={firstImage.url}
             alt={firstImage.alt || product.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="h-full w-full bg-gray-100 flex items-center justify-center">
-            <span className="text-gray-400">Image indisponible</span>
+          // Placeholder stylisé si pas d'image
+          <div className="h-full w-full flex items-center justify-center">
+            <span className="text-gray-400 font-serif">{product.title}</span>
           </div>
         )}
       </div>
 
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800 truncate">
-          {product.title}
-        </h3>
-        <p className="mt-2 text-md font-bold text-indigo-600">
+      {/* Informations produit */}
+      <div className="mt-3">
+        <h3 className="text-lg font-semibold text-gray-800">{product.title}</h3>
+        <p className="mt-1 text-md font-bold text-gray-900">
           {formatCents(product.price_cents, product.currency)}
         </p>
       </div>

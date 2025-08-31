@@ -1,13 +1,9 @@
-// path: app/products/[slug]/page.tsx
+// path: src/app/products/[slug]/page.tsx
 import ProductGallery from '@/components/ProductGallery';
 import { formatCents } from '@/lib/money';
 import { notFound } from 'next/navigation';
 import type { Product, ProductImage, Variant } from '@prisma/client';
-
-// Ce composant gère l'état (quantité, variante choisie) et l'action d'ajout.
-// Il doit donc être un Client Component.
-'use client';
-import { useState } from 'react';
+import ProductInteractions from '@/components/ProductInteractions'; // <-- Importer le nouveau composant
 
 // Le type complet pour notre produit, incluant les relations
 type ProductWithDetails = Product & {
@@ -30,99 +26,37 @@ async function getProduct(slug: string): Promise<{ product: ProductWithDetails }
 }
 
 
-// --- Composant Client pour les interactions ---
-function ProductInteractions({ product }: { product: ProductWithDetails }) {
-  const [quantity, setQuantity] = useState(1);
-  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(
-    product.variants?.[0]?.id || null
-  );
-
-  const handleAddToCart = () => {
-    // Logique d'ajout au panier (ex: appeler un contexte, une API, etc.)
-    console.log({
-      productId: product.id,
-      variantId: selectedVariantId,
-      quantity,
-    });
-    alert(`${quantity} "${product.title}" ajouté(s) au panier !`);
-  };
-
-  return (
-    <>
-      {/* Sélecteur de variantes */}
-      {product.variants && product.variants.length > 0 && (
-        <div className="mt-4">
-          <label htmlFor="variant" className="block text-sm font-medium text-gray-700">
-            Option
-          </label>
-          <select
-            id="variant"
-            value={selectedVariantId || ''}
-            onChange={(e) => setSelectedVariantId(e.target.value)}
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-          >
-            {product.variants.map((variant) => (
-              <option key={variant.id} value={variant.id}>
-                {variant.name} (+{formatCents(variant.price_delta_cents)})
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      {/* Sélecteur de quantité et bouton d'ajout */}
-      <div className="mt-6 flex items-center gap-4">
-        <input
-          type="number"
-          min="1"
-          value={quantity}
-          onChange={(e) => setQuantity(Number(e.target.value))}
-          className="w-20 border-gray-300 rounded-md text-center"
-        />
-        <button
-          onClick={handleAddToCart}
-          className="flex-1 bg-indigo-600 text-white font-semibold py-3 px-6 rounded-md hover:bg-indigo-700 transition-colors"
-        >
-          Ajouter au panier
-        </button>
-      </div>
-    </>
-  );
-}
-
-// --- La page principale reste un Server Component ---
-export default async function ProductPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+// --- La page principale est maintenant un Server Component ---
+export default async function ProductPage({ params }: { params: { slug: string } }) {
   const data = await getProduct(params.slug);
 
   if (!data) {
-    notFound(); // Affiche la page 404 de Next.js
+    notFound();
   }
-
   const { product } = data;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+    <div className="container mx-auto px-4 py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+        
         {/* Colonne de gauche : Galerie */}
         <ProductGallery images={product.images} defaultAlt={product.title} />
 
         {/* Colonne de droite : Informations */}
-        <div>
-          <h1 className="text-3xl lg:text-4xl font-bold tracking-tight text-gray-900">
+        <div className="flex flex-col">
+          <h1 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900">
             {product.title}
           </h1>
-          <p className="mt-4 text-2xl font-semibold text-indigo-600">
+          <p className="mt-4 text-3xl font-semibold text-gray-800">
             {formatCents(product.price_cents, product.currency)}
           </p>
-          <div className="mt-6 prose lg:prose-lg text-gray-600">
+          
+          {/* La classe "prose" améliore la lisibilité du texte */}
+          <div className="mt-6 prose prose-lg text-gray-600 max-w-none">
             <p>{product.description}</p>
           </div>
           
-          <div className="mt-6 border-t pt-6">
+          <div className="mt-8 pt-8 border-t">
             <ProductInteractions product={product} />
           </div>
         </div>
