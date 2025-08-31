@@ -1,0 +1,164 @@
+[
+    {
+      "title": "Suspension en Raphia Naturel 'Soleil'",
+      "slug": "suspension-raphia-soleil",
+      "description": "Apportez une touche de chaleur et d'authenticité à votre intérieur avec notre suspension 'Soleil', tressée à la main au Maroc. Parfaite pour un salon ou une chambre.",
+      "price_cents": 7900,
+      "currency": "eur",
+      "image_urls": [
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/suspension_raphia_1.jpg",
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/suspension_raphia_2.jpg"
+      ],
+      "category": "Luminaires",
+      "weight_g": 800,
+      "length_mm": 600,
+      "width_mm": 600,
+      "height_mm": 250,
+      "processing_time_days": 3
+    },
+    {
+      "title": "Miroir Doré Ovale 'Fès'",
+      "slug": "miroir-dore-ovale-fes",
+      "description": "Miroir élégant en laiton doré, martelé à la main par des artisans de Fès. Sa forme ovale et ses détails délicats en font une pièce maîtresse.",
+      "price_cents": 12000,
+      "currency": "eur",
+      "image_urls": [
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/miroir_dore_1.jpg"
+      ],
+      "category": "Miroirs",
+      "weight_g": 2500,
+      "length_mm": 400,
+      "width_mm": 50,
+      "height_mm": 600,
+      "processing_time_days": 5
+    },
+    {
+      "title": "Tabouret Beldi en Bois et Corde",
+      "slug": "tabouret-beldi-en-bois-et-corde",
+      "description": "Le tabouret traditionnel marocain, robuste et esthétique. Fabriqué en bois d'eucalyptus et assise en corde tressée. Idéal comme siège d'appoint ou bout de canapé.",
+      "price_cents": 5500,
+      "currency": "eur",
+      "image_urls": [
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/tabouret_beldi_1.jpg",
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/tabouret_beldi_2.jpg"
+      ],
+      "category": "Mobilier",
+      "weight_g": 3000,
+      "length_mm": 350,
+      "width_mm": 350,
+      "height_mm": 400,
+      "processing_time_days": 2
+    },
+    {
+      "title": "Panier de Rangement Berbère 'Taza'",
+      "slug": "panier-rangement-berbere-taza",
+      "description": "Panier authentique en feuille de palmier et laine colorée, traditionnellement utilisé pour le pain. Un objet de décoration unique et pratique pour ranger vos affaires.",
+      "price_cents": 4500,
+      "currency": "eur",
+      "image_urls": [
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/panier_berbere_1.jpg"
+      ],
+      "category": "Paniers",
+      "weight_g": 600,
+      "length_mm": 300,
+      "width_mm": 300,
+      "height_mm": 450,
+      "processing_time_days": 2
+    },
+    {
+      "title": "Applique Murale en Osier 'Doum'",
+      "slug": "applique-murale-osier-doum",
+      "description": "Créez une ambiance douce et tamisée avec cette applique murale en osier tressé. Sa lumière diffuse est parfaite pour un couloir ou une tête de lit.",
+      "price_cents": 4900,
+      "currency": "eur",
+      "image_urls": [
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/applique_osier_1.jpg"
+      ],
+      "category": "Luminaires",
+      "weight_g": 400,
+      "length_mm": 250,
+      "width_mm": 150,
+      "height_mm": 300,
+      "processing_time_days": 3
+    },
+    {
+      "title": "Grand Plat en Céramique 'Tamegroute'",
+      "slug": "plat-ceramique-tamegroute",
+      "description": "Pièce unique de la poterie de Tamegroute, reconnaissable à son émail vert imparfait. Idéal comme plat de service ou centre de table décoratif.",
+      "price_cents": 8500,
+      "currency": "eur",
+      "image_urls": [
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/plat_tamegroute_1.jpg"
+      ],
+      "category": "Art de la Table",
+      "weight_g": 2200,
+      "length_mm": 400,
+      "width_mm": 400,
+      "height_mm": 80,
+      "processing_time_days": 4
+    },
+    {
+      "title": "Banc en Bois Brut 'Atlas'",
+      "slug": "banc-bois-brut-atlas",
+      "description": "Banc minimaliste en bois brut, parfait pour une entrée, un couloir ou au pied d'un lit. Chaque pièce est unique et met en valeur les nervures du bois.",
+      "price_cents": 15900,
+      "currency": "eur",
+      "image_urls": [
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/banc_bois_1.jpg"
+      ],
+      "category": "Mobilier",
+      "weight_g": 8000,
+      "length_mm": 1200,
+      "width_mm": 300,
+      "height_mm": 450,
+      "processing_time_days": 7
+    },
+    {
+      "title": "Cache-pot sur Pied en Osier",
+      "slug": "cache-pot-pied-osier",
+      "description": "Mettez en valeur vos plantes avec ce cache-pot surélevé en osier. Son design bohème s'intègre parfaitement dans tous les intérieurs.",
+      "price_cents": 3900,
+      "currency": "eur",
+      "image_urls": [
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/cache_pot_1.jpg"
+      ],
+      "category": "Paniers",
+      "weight_g": 700,
+      "length_mm": 250,
+      "width_mm": 250,
+      "height_mm": 400,
+      "processing_time_days": 2
+    },
+    {
+      "title": "Tapis Boucherouite Coloré",
+      "slug": "tapis-boucherouite-colore",
+      "description": "Tapis berbère unique fait à la main à partir de textiles recyclés. Chaque tapis raconte une histoire avec ses motifs et couleurs vibrantes. Parfait pour une touche de vie.",
+      "price_cents": 25000,
+      "currency": "eur",
+      "image_urls": [
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/tapis_boucherouite_1.jpg"
+      ],
+      "category": "Tapis",
+      "weight_g": 5000,
+      "length_mm": 1800,
+      "width_mm": 1200,
+      "height_mm": 20,
+      "processing_time_days": 5
+    },
+    {
+      "title": "Pouf en Cuir de Marrakech",
+      "slug": "pouf-cuir-marrakech",
+      "description": "Authentique pouf en cuir véritable, fabriqué et cousu à la main à Marrakech. Livré non rembourré. Idéal comme repose-pieds ou siège d'appoint.",
+      "price_cents": 6500,
+      "currency": "eur",
+      "image_urls": [
+        "https://res.cloudinary.com/lebazare-placeholder/image/upload/vplaceholder/pouf_cuir_1.jpg"
+      ],
+      "category": "Mobilier",
+      "weight_g": 1000,
+      "length_mm": 500,
+      "width_mm": 500,
+      "height_mm": 350,
+      "processing_time_days": 3
+    }
+  ]

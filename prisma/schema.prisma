@@ -1,0 +1,226 @@
+// path: prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Modèle principal pour un produit en vente.
+model Product {
+  id                   String          @id @default(cuid())
+  title                String
+  slug                 String          @unique
+  description          String?         @db.Text
+  price_cents          Int
+  currency             String          @default("eur")
+  weight_g             Int?
+  length_mm            Int?
+  width_mm             Int?
+  height_mm            Int?
+  processing_time_days Int             @default(1)
+  featured             Boolean         @default(false)
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+  images               ProductImage[]
+  variants             Variant[]
+  categories           ProductCategory[]
+  orderItems           OrderItem[]
+
+  @@map("products")
+}
+
+// Stocke les images associées à un produit.
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  position  Int     @default(0)
+
+  @@index([productId])
+  @@map("product_images")
+}
+
+// Gère les variations d'un produit (ex: couleur, taille).
+model Variant {
+  id                String      @id @default(cuid())
+  productId         String
+  product           Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name              String // ex: "Couleur", "Taille"
+  price_delta_cents Int         @default(0)
+  sku               String?     @unique
+  stock             Int         @default(0)
+  orderItems        OrderItem[]
+
+  @@index([productId])
+  @@map("variants")
+}
+
+// Catégories pour organiser les produits (peut être hiérarchique).
+model Category {
+  id       String          @id @default(cuid())
+  name     String
+  slug     String          @unique
+  parentId String?
+  parent   Category?       @relation("ParentChild", fields: [parentId], references: [id])
+  children Category[]      @relation("ParentChild")
+  products ProductCategory[]
+
+  @@map("categories")
+}
+
+// Table de jointure pour la relation plusieurs-à-plusieurs entre Produits et Catégories.
+model ProductCategory {
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  @@id([productId, categoryId])
+  @@map("products_categories")
+}
+
+// Représente un client de la boutique.
+model Customer {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  phone     String?
+  metadata  Json     @default("{}")
+  createdAt DateTime @default(now())
+  addresses Address[]
+  orders    Order[]
+
+  @@map("customers")
+}
+
+// Adresse d'un client, facturation ou livraison.
+model Address {
+  id             String   @id @default(cuid())
+  customerId     String
+  customer       Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  type           AddressType
+  line1          String
+  line2          String?
+  city           String
+  postalCode     String
+  country        String
+  shippingOrders Order[]  @relation("ShippingAddress")
+  billingOrders  Order[]  @relation("BillingAddress")
+
+  @@index([customerId])
+  @@map("addresses")
+}
+
+// Représente une commande passée par un client.
+model Order {
+  id                String      @id @default(cuid())
+  customerId        String?
+  customer          Customer?   @relation(fields: [customerId], references: [id])
+  total_cents       Int
+  currency          String      @default("eur")
+  status            OrderStatus @default(PENDING)
+  shippingAddressId String
+  shippingAddress   Address     @relation("ShippingAddress", fields: [shippingAddressId], references: [id])
+  billingAddressId  String
+  billingAddress    Address     @relation("BillingAddress", fields: [billingAddressId], references: [id])
+  payment_intent_id String?     @unique
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  items             OrderItem[]
+  shipments         Shipment[]
+
+  @@index([customerId])
+  @@map("orders")
+}
+
+// Un article (produit/variant) dans une commande.
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id])
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id])
+  variantId   String?
+  variant     Variant? @relation(fields: [variantId], references: [id])
+  qty         Int
+  price_cents Int // Prix au moment de l'achat
+
+  @@index([orderId])
+  @@index([productId])
+  @@index([variantId])
+  @@map("order_items")
+}
+
+// Gère les informations d'expédition pour une commande.
+model Shipment {
+  id             String   @id @default(cuid())
+  orderId        String
+  order          Order    @relation(fields: [orderId], references: [id])
+  carrier        String?
+  trackingNumber String?
+  cost_cents     Int      @default(0)
+  shippedAt      DateTime @default(now())
+
+  @@index([orderId])
+  @@map("shipments")
+}
+
+// Codes de réduction applicables aux commandes.
+model Coupon {
+  id                  String     @id @default(cuid())
+  code                String     @unique
+  type                CouponType
+  value_cents_or_pct  Int
+  expiresAt           DateTime?
+  usageLimit          Int?
+
+  @@map("coupons")
+}
+
+// Compte pour un administrateur du site.
+model Admin {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  hashed_password String
+  role            AdminRole @default(EDITOR)
+
+  @@map("admins")
+}
+
+// Paramètres généraux du site (clé-valeur).
+model Setting {
+  key   String @id @unique
+  value Json
+
+  @@map("settings")
+}
+
+// --- ÉNUMÉRATIONS ---
+
+enum AddressType {
+  BILLING
+  SHIPPING
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+enum CouponType {
+  PERCENT
+  FIXED
+}
+
+enum AdminRole {
+  ADMIN
+  EDITOR
+}
