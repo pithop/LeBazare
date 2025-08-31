@@ -42,19 +42,14 @@ export async function POST(request: NextRequest) {
       data: {
         name,
         email,
-        // Le modèle Prisma attend un objet pour l'adresse, mais on peut le laisser vide à l'inscription.
-        // On ne stocke pas le mot de passe hashé dans le modèle Customer, on le crée ici pour la logique.
-        // NOTE: Le modèle Prisma `Customer` n'a pas de champ mot de passe. Il faudra l'ajouter.
-        // Pour l'instant, on simule sa création.
-        // metadata: { hashedPassword } // Exemple de stockage si vous n'avez pas de champ password.
+        hashed_password: hashedPassword, // <-- UTILISATION DU NOUVEAU CHAMP
       },
     });
 
-    // NOTE: Il est crucial d'ajouter un champ `password` au modèle `Customer` dans `schema.prisma`
-    // Pour l'instant, la réponse est 201 mais l'utilisateur ne pourra pas se connecter sans stocker le hash.
+    const { hashed_password, ...customerData } = newCustomer;
 
     return NextResponse.json(
-      { message: 'Compte client créé avec succès.' },
+      { customer: customerData, message: 'Compte client créé avec succès.' },
       { status: 201 }
     );
   } catch (error) {

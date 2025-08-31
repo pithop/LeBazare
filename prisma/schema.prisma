@@ -86,14 +86,15 @@ model ProductCategory {
 
 // Représente un client de la boutique.
 model Customer {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String   @unique
-  phone     String?
-  metadata  Json     @default("{}")
-  createdAt DateTime @default(now())
-  addresses Address[]
-  orders    Order[]
+  id              String   @id @default(cuid())
+  name            String?
+  email           String   @unique
+  hashed_password String   // <-- AJOUTE CETTE LIGNE
+  phone           String?
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+  addresses       Address[]
+  orders          Order[]
 
   @@map("customers")
 }

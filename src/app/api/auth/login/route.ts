@@ -30,16 +30,16 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Si pas d'admin, chercher un client
-    // NOTE: Cette partie nécessite un champ `password` sur le modèle `Customer`.
     if (!user) {
-        // const customer = await prisma.customer.findUnique({ where: { email } });
-        // if (customer && customer.password) { // Assumant que `password` existe
-        //   const passwordMatch = await bcrypt.compare(password, customer.password);
-        //   if (passwordMatch) {
-        //     user = customer;
-        //     role = 'customer';
-        //   }
-        // }
+        const customer = await prisma.customer.findUnique({ where: { email } });
+        if (customer) {
+          const passwordMatch = await bcrypt.compare(password, customer.hashed_password); // <-- ON VÉRIFIE LE HASH DU CLIENT
+          if (passwordMatch) {
+            const { hashed_password, ...customerData } = customer;
+            user = customerData;
+            role = 'customer';
+          }
+        }
     }
 
     if (!user || !role) {
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({
         id: user.id,
         email: user.email,
-        name: user.name, // `name` est sur Customer, pas sur Admin par défaut
+        name: user.name,
         role: role
     }, { status: 200 });
 
