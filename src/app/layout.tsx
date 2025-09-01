@@ -1,29 +1,39 @@
 // path: src/app/layout.tsx
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css' // Import CRUCIAL - doit être présent
+import type { Metadata } from 'next';
+import { Inter, Lora } from 'next/font/google';
+import './globals.css';
+import Header from '@/components/Header'; // Importer le Header
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const lora = Lora({ subsets: ['latin'], variable: '--font-lora' });
 
 export const metadata: Metadata = {
-  title: 'LeBazare - Votre boutique en ligne',
-  description: 'Découvrez nos produits exceptionnels',
+  title: 'Le Bazare - Artisanat Authentique',
+  description: 'Décoration et mobilier bohème fait main.',
+};
+
+function Footer() {
+  return (
+    <footer className="border-t bg-white">
+      <div className="container mx-auto px-4 py-8 text-center text-gray-500">
+        <p>&copy; {new Date().getFullYear()} Le Bazare. Tous droits réservés.</p>
+      </div>
+    </footer>
+  );
 }
 
 export default function RootLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      {/* Test immédiat avec des classes Tailwind */}
-      <body className={`${inter.className} min-h-screen bg-gradient-to-br from-gray-50 to-gray-100`}>
-        {/* Container principal avec styles Tailwind */}
-        <div className="relative">
-          {children}
+      <body className={`${inter.variable} ${lora.variable} font-sans bg-gray-50 text-gray-800 antialiased`}>
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
         </div>
       </body>
     </html>
-  )
+  );
 }

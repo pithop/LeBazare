@@ -6,7 +6,7 @@
     "price_cents": 7900,
     "currency": "eur",
     "image_urls": [
-      "https://googleusercontent.com/images/a-natural-raffia-pendant-light-in-the-shape-of-the-sun.jpeg"
+      "https://res.cloudinary.com/dggbfnfdl/image/upload/v1756662339/suspension-raphia-soleil_vg1yhn.webp"
     ],
     "category": "Luminaires",
     "weight_g": 800,
@@ -22,7 +22,7 @@
     "price_cents": 12000,
     "currency": "eur",
     "image_urls": [
-      "https://googleusercontent.com/images/an-oval-golden-mirror-from-fes.jpeg"
+      "https://res.cloudinary.com/dggbfnfdl/image/upload/v1756662339/miroir-dore-ovale-fes_szbken.webp"
     ],
     "category": "Miroirs",
     "weight_g": 2500,
@@ -38,7 +38,7 @@
     "price_cents": 5500,
     "currency": "eur",
     "image_urls": [
-      "https://googleusercontent.com/images/a-beldi-stool-made-of-wood-and-rope.jpeg"
+      "https://res.cloudinary.com/dggbfnfdl/image/upload/v1756662339/tabouret-beldi-en-bois-et-corde_pvcosb.webp"
     ],
     "category": "Mobilier",
     "weight_g": 3000,
@@ -54,7 +54,7 @@
     "price_cents": 4500,
     "currency": "eur",
     "image_urls": [
-      "https://googleusercontent.com/images/a-berber-storage-basket-from-taza.jpeg"
+      "https://res.cloudinary.com/dggbfnfdl/image/upload/v1756662339/panier-rangement-berbere-taza_mimdgt.jpg"
     ],
     "category": "Paniers",
     "weight_g": 600,
@@ -70,7 +70,7 @@
     "price_cents": 4900,
     "currency": "eur",
     "image_urls": [
-      "https://googleusercontent.com/images/a-wicker-wall-sconce-named-doum.jpeg"
+      "https://res.cloudinary.com/dggbfnfdl/image/upload/v1756662338/applique-murale-osier-doum_xxbsve.webp"
     ],
     "category": "Luminaires",
     "weight_g": 400,
@@ -86,7 +86,7 @@
     "price_cents": 8500,
     "currency": "eur",
     "image_urls": [
-      "https://googleusercontent.com/images/a-large-ceramic-dish-from-tamegroute.jpeg"
+      "https://res.cloudinary.com/dggbfnfdl/image/upload/v1756662338/plat-ceramique-tamegroute_g1cnj0.webp"
     ],
     "category": "Art de la Table",
     "weight_g": 2200,
@@ -102,7 +102,7 @@
     "price_cents": 15900,
     "currency": "eur",
     "image_urls": [
-      "https://googleusercontent.com/images/a-raw-wood-bench-named-atlas.jpeg"
+      "https://res.cloudinary.com/dggbfnfdl/image/upload/v1756662338/banc-bois-brut-atlas_csv22l.avif"
     ],
     "category": "Mobilier",
     "weight_g": 8000,
@@ -118,7 +118,7 @@
     "price_cents": 3900,
     "currency": "eur",
     "image_urls": [
-      "https://googleusercontent.com/images/a-wicker-planter-on-legs.jpeg"
+      "https://res.cloudinary.com/dggbfnfdl/image/upload/v1756662338/cache-pot-pied-osier_sn0bwu.webp"
     ],
     "category": "Paniers",
     "weight_g": 700,
@@ -134,7 +134,7 @@
     "price_cents": 25000,
     "currency": "eur",
     "image_urls": [
-      "https://googleusercontent.com/images/a-colorful-boucherouite-rug.jpeg"
+      "https://res.cloudinary.com/dggbfnfdl/image/upload/v1756662338/tapis-boucherouite-colore_z9tsn6.webp"
     ],
     "category": "Tapis",
     "weight_g": 5000,
@@ -150,7 +150,7 @@
     "price_cents": 6500,
     "currency": "eur",
     "image_urls": [
-      "https://googleusercontent.com/images/a-leather-pouf-from-marrakech.jpeg"
+      "https://res.cloudinary.com/dggbfnfdl/image/upload/v1756662338/pouf-cuir-marrakech_qqlsgo.avif"
     ],
     "category": "Mobilier",
     "weight_g": 1000,

@@ -11,8 +11,7 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
-        port: '',
-        pathname: '/lebazare-placeholder/**',
+        pathname: '/**',
       },
       {
         protocol: 'https',
