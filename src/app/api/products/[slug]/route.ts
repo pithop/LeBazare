@@ -8,7 +8,8 @@ export async function GET(
   { params }: { params: { slug: string } }
 ) {
   try {
-    const { slug } = params;
+    // CORRECTION : On attend la résolution de params
+    const { slug } = await params;
 
     if (!slug) {
       return NextResponse.json(

@@ -49,15 +49,17 @@ export async function GET(request: NextRequest) {
         where,
         take: limit,
         skip: skip,
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: { createdAt: 'desc' },
         include: {
           images: {
-            orderBy: {
-              position: 'asc',
+            orderBy: { position: 'asc' },
+            take: 2,
+          },
+          variants: true,
+          categories: { // <-- AJOUTER CECI
+            include: {
+              category: true,
             },
-            take: 1, // On ne prend que la première image pour la liste
           },
         },
       }),

@@ -1,5 +1,5 @@
 // path: tailwind.config.ts
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
@@ -9,18 +9,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // Configuration personnalisée pour LeBazare
+      fontFamily: {
+        sans: ['var(--font-sans)', 'sans-serif'],
+        serif: ['var(--font-serif)', 'serif'],
+      },
       colors: {
-        primary: {
-          50: '#eff6ff',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-        }
+        // Nouvelle palette de couleurs inspirée de libitiishop
+        'brand-dark': '#1a1a1a', // Un noir doux pour le texte et les éléments forts
+        'brand-light': '#f9f9f9', // Un fond légèrement cassé, plus doux que le blanc pur
+        'brand-accent': '#a18a68', // Un accent neutre et terreux (optionnel)
+        'brand-gray': '#737373', // Pour les textes secondaires
       },
     },
   },
   plugins: [],
-}
-
-export default config
+};
+export default config;

@@ -3,10 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import Stripe from 'stripe';
 
-// Initialisation de Stripe avec la clé secrète
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-// Définition des types pour la requête
 interface CartItem {
   id: string;
   productId: string;
@@ -18,38 +16,55 @@ interface CartItem {
 
 interface RequestBody {
   cartItems: CartItem[];
-  // Ajoutez ici les informations client si nécessaire (ex: customerId)
-  // customerInfo: { customerId: string; shippingAddressId: string; billingAddressId: string; };
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { cartItems /*, customerInfo */ }: RequestBody = await request.json();
+    const { cartItems }: RequestBody = await request.json();
 
     if (!cartItems || cartItems.length === 0) {
       return NextResponse.json({ message: 'Le panier est vide.' }, { status: 400 });
     }
 
-    // --- 1. Création de la commande "PENDING" en base de données ---
+    // --- SOLUTION TEMPORAIRE : Création d'un client et d'une adresse de substitution ---
+    // En production, ces données viendraient de l'utilisateur authentifié.
+    const customer = await prisma.customer.upsert({
+      where: { email: 'placeholder-customer@lebazare.fr' },
+      update: {},
+      create: {
+        email: 'placeholder-customer@lebazare.fr',
+        name: 'Client Test',
+        hashed_password: 'not-applicable', // Requis par le schéma mais non utilisé ici
+      },
+    });
 
-    // Calculez le total en centimes depuis le backend pour la sécurité
+    // On crée une nouvelle adresse à chaque fois pour cet exemple.
+    // En production, on réutiliserait une adresse existante du client.
+    const address = await prisma.address.create({
+      data: {
+        customerId: customer.id,
+        type: 'SHIPPING',
+        line1: '123 Rue du Test',
+        city: 'Paris',
+        postalCode: '75001',
+        country: 'FR',
+      },
+    });
+    // --- FIN DE LA SOLUTION TEMPORAIRE ---
+
+
     const totalCents = cartItems.reduce(
       (acc, item) => acc + item.price_cents * item.quantity,
       0
     );
 
-    // NOTE: Pour une application en production, vous devriez créer/récupérer
-    // le client et ses adresses ici avant de créer la commande.
     const newOrder = await prisma.order.create({
       data: {
         total_cents: totalCents,
         status: 'PENDING',
-        shippingAddress: {
-          connect: { id: 'shippingAddressId' }, // Replace with actual shipping address ID
-        },
-        billingAddress: {
-          connect: { id: 'billingAddressId' }, // Replace with actual billing address ID
-        },
+        customerId: customer.id,          // <-- Utilise l'ID du client de substitution
+        shippingAddressId: address.id, // <-- Utilise l'ID de l'adresse réelle
+        billingAddressId: address.id,  // <-- On utilise la même pour la facturation
         items: {
           create: cartItems.map((item) => ({
             productId: item.productId,
@@ -61,14 +76,11 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // --- 2. Création de la session de paiement Stripe ---
-
     const line_items = cartItems.map((item) => ({
       price_data: {
         currency: 'eur',
         product_data: {
           name: item.title,
-          // Vous pouvez ajouter plus de détails ici, comme une description ou des images
         },
         unit_amount: item.price_cents,
       },
@@ -78,12 +90,11 @@ export async function POST(request: NextRequest) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card', 'paypal'],
+      payment_method_types: ['card'],
       line_items: line_items,
       mode: 'payment',
       success_url: `${siteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/cart?canceled=true`,
-      // CRUCIAL: on attache l'ID de notre commande à la session Stripe
       metadata: {
         orderId: newOrder.id,
       },

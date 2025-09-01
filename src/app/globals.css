@@ -1,77 +1,33 @@
 /* path: src/app/globals.css */
 
-/* Directives Tailwind CSS v3 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Styles de base personnalisés pour LeBazare */
 @layer base {
-  /* Reset et styles globaux */
-  html {
-    @apply scroll-smooth;
-  }
-  
   body {
-    @apply antialiased bg-gray-50 text-gray-900;
+    @apply font-sans text-brand-dark bg-brand-light antialiased;
   }
-  
-  /* Typography par défaut */
-  h1 {
-    @apply text-4xl font-bold;
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
   }
-  
-  h2 {
-    @apply text-3xl font-semibold;
-  }
-  
-  h3 {
-    @apply text-2xl font-semibold;
+
+  a {
+    @apply hover:text-brand-gray transition-colors duration-200;
   }
 }
 
-/* Composants réutilisables */
 @layer components {
-  /* Bouton principal LeBazare */
   .btn-primary {
-    @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200;
+    @apply inline-block bg-brand-dark text-white px-8 py-3 text-sm font-medium tracking-wider uppercase transition-colors hover:bg-brand-gray;
   }
-  
-  /* Card produit */
-  .product-card {
-    @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200;
-  }
-}
 
-/* Utilities personnalisées */
-@layer utilities {
-  /* Animation de chargement */
-  .animate-shimmer {
-    animation: shimmer 2s linear infinite;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
+  .btn-secondary {
+    @apply inline-block bg-transparent text-brand-dark border border-brand-dark px-8 py-3 text-sm font-medium tracking-wider uppercase transition-colors hover:bg-brand-dark hover:text-white;
   }
-}
 
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
+  .container-page {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
   }
-  100% {
-    background-position: -200% 0;
-  }
-}
-@keyframes slideImage {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%); /* Adjust this value based on how much you want to slide */
-  }
-}
-
-.animate-slide-hero {
-  animation: slideImage 20s ease-in-out infinite alternate; /* Adjust duration as needed */
-  width: 150%; /* Make the image wider than its container */
-  left: 0;
 }
