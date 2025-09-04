@@ -10,16 +10,28 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
+        // Votre configuration est déjà parfaite, nous la conservons.
         sans: ['var(--font-sans)', 'sans-serif'],
         serif: ['var(--font-serif)', 'serif'],
       },
       colors: {
-        // Nouvelle palette de couleurs inspirée de libitiishop
-        'brand-dark': '#1a1a1a', // Un noir doux pour le texte et les éléments forts
-        'brand-light': '#f9f9f9', // Un fond légèrement cassé, plus doux que le blanc pur
-        'brand-accent': '#a18a68', // Un accent neutre et terreux (optionnel)
-        'brand-gray': '#737373', // Pour les textes secondaires
+        'brand-dark': '#1a1a1a',
+        'brand-light': '#f9f9f9',
+        'brand-accent': '#a18a68',
+        'brand-gray': '#737373',
       },
+      // --- AJOUT DE CETTE SECTION ---
+      keyframes: {
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        // Ceci nous permettra d'utiliser la classe `animate-fadeInUp`
+        fadeInUp: 'fadeInUp 0.8s ease-out forwards',
+      },
+      // --- FIN DE L'AJOUT ---
     },
   },
   plugins: [],

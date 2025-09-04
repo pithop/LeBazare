@@ -4,8 +4,8 @@ import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Toaster } from 'react-hot-toast'; // Importer le Toaster
 
-// Configuration des polices
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
@@ -30,12 +30,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${inter.variable} ${playfairDisplay.variable}`}>
-      <body className="flex flex-col min-h-screen">
+      <body className="flex min-h-screen flex-col">
+        {/* Le Toaster peut être placé n'importe où, ici c'est un bon endroit */}
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            // Styles pour correspondre à notre design
+            style: {
+              background: '#333',
+              color: '#fff',
+            },
+          }}
+        />
         <Header />
         <main className="flex-grow">
           {children}
         </main>
-        <Footer />
+        {/* Nous n'avons pas encore créé le Footer, mais la structure est prête */}
+        {/* <Footer /> */}
       </body>
     </html>
   );

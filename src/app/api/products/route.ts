@@ -7,66 +7,54 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    // --- Parsing des paramètres de la requête ---
+    // --- Parsing des paramètres ---
     const page = parseInt(searchParams.get('page') || '1', 10);
-    const limit = parseInt(searchParams.get('limit') || '10', 10);
-    const q = searchParams.get('q');
+    const limit = parseInt(searchParams.get('limit') || '12', 10);
     const category = searchParams.get('category');
-
-    // Validation des entrées de pagination
-    if (isNaN(page) || isNaN(limit) || page < 1 || limit < 1) {
-      return NextResponse.json(
-        { message: "Les paramètres 'page' et 'limit' doivent être des nombres positifs." },
-        { status: 400 }
-      );
-    }
+    const sort = searchParams.get('sort'); // Nouveau: paramètre de tri
 
     const skip = (page - 1) * limit;
 
-    // --- Construction de la clause WHERE pour Prisma ---
+    // --- Construction de la clause WHERE (filtre) ---
     const where: Prisma.ProductWhereInput = {};
-
-    if (q) {
-      where.OR = [
-        { title: { contains: q, mode: 'insensitive' } },
-        { description: { contains: q, mode: 'insensitive' } },
-      ];
-    }
-
     if (category) {
       where.categories = {
         some: {
-          category: {
-            slug: category,
-          },
+          category: { slug: category },
         },
       };
     }
+    // Note : Pour la disponibilité ou la couleur, il faudrait ajouter des champs au schéma Prisma.
 
-    // --- Exécution des requêtes en parallèle ---
+    // --- Construction de la clause ORDER BY (tri) ---
+    const orderBy: Prisma.ProductOrderByWithRelationInput = {};
+    if (sort === 'price-asc') {
+      orderBy.price_cents = 'asc';
+    } else if (sort === 'price-desc') {
+      orderBy.price_cents = 'desc';
+    } else {
+      orderBy.createdAt = 'desc'; // Tri par défaut
+    }
+
+    // --- Exécution des requêtes ---
     const [items, total] = await prisma.$transaction([
       prisma.product.findMany({
         where,
         take: limit,
         skip: skip,
-        orderBy: { createdAt: 'desc' },
+        orderBy, // Utilisation de notre nouvelle clause de tri
         include: {
           images: {
             orderBy: { position: 'asc' },
-            take: 2,
+            take: 1,
           },
+          // On inclut les variants pour savoir si on doit afficher "Choisir des options"
           variants: true,
-          categories: { // <-- AJOUTER CECI
-            include: {
-              category: true,
-            },
-          },
         },
       }),
       prisma.product.count({ where }),
     ]);
 
-    // --- Réponse ---
     return NextResponse.json({
       items,
       total,
