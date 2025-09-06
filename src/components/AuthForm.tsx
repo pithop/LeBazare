@@ -5,6 +5,7 @@ import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/useAuth';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 interface AuthFormProps {
   mode: 'login' | 'signup';
@@ -42,10 +43,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
       }
       
       setUser(isLogin ? data : data.customer);
+      toast.success(isLogin ? 'Connexion réussie !' : 'Compte créé avec succès !');
       router.push('/products');
 
     } catch (err: any) {
       setError(err.message);
+      toast.error(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -53,10 +56,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
-        {isLogin ? 'Bienvenue' : 'Créez votre compte'}
-      </h1>
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 font-serif">
+        {isLogin ? 'Bienvenue' : 'Créer un compte'}
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* CORRECTION : Chaque champ est maintenant dans sa propre div */}
         {!isLogin && (
           <div>
             <label className="form-label" htmlFor="name">
@@ -104,7 +108,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         
         <div>
           <button
-            className="btn-primary w-full disabled:opacity-50"
+            className="btn-primary w-full"
             type="submit"
             disabled={isLoading}
           >
@@ -114,7 +118,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
       </form>
       <p className="mt-6 text-center text-sm text-gray-600">
         {isLogin ? "Pas encore de compte ?" : 'Déjà un compte ?'}
-        <Link href={isLogin ? '/signup' : '/login'} className="font-semibold ml-1">
+        <Link href={isLogin ? '/signup' : '/login'} className="font-semibold text-brand-accent hover:text-brand-dark ml-1">
           {isLogin ? "Inscrivez-vous" : 'Connectez-vous'}
         </Link>
       </p>

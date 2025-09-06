@@ -7,14 +7,15 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="container-page flex flex-col items-center justify-center">
+    // On utilise min-h-screen pour prendre toute la hauteur et centrer verticalement
+    <div className="container-page flex min-h-[calc(100vh-80px)] flex-col items-center justify-center py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="text-4xl font-serif font-extrabold text-gray-900 tracking-tight">
+          <Link href="/" className="text-4xl font-serif font-extrabold text-brand-dark tracking-tight">
             LeBazare
           </Link>
         </div>
-        <div className="bg-white p-8 rounded-lg shadow-lg">
+        <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-200">
           {children}
         </div>
       </div>

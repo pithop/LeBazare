@@ -2,13 +2,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import Stripe from 'stripe';
+import { jwtVerify } from 'jose';
+import { cookies } from 'next/headers';
+import { randomBytes } from 'crypto';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 interface CartItem {
   id: string;
   productId: string;
-  variantId?: string;
+  variant?: { id: string };
   title: string;
   price_cents: number;
   quantity: number;
@@ -16,90 +20,105 @@ interface CartItem {
 
 interface RequestBody {
   cartItems: CartItem[];
+  email?: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { cartItems }: RequestBody = await request.json();
+    const { cartItems, email: guestEmail }: RequestBody = await request.json();
 
     if (!cartItems || cartItems.length === 0) {
       return NextResponse.json({ message: 'Le panier est vide.' }, { status: 400 });
     }
 
-    // --- SOLUTION TEMPORAIRE : Création d'un client et d'une adresse de substitution ---
-    // En production, ces données viendraient de l'utilisateur authentifié.
-    const customer = await prisma.customer.upsert({
-      where: { email: 'placeholder-customer@lebazare.fr' },
-      update: {},
-      create: {
-        email: 'placeholder-customer@lebazare.fr',
-        name: 'Client Test',
-        hashed_password: 'not-applicable', // Requis par le schéma mais non utilisé ici
-      },
+    let customer;
+    
+    // CORRECTION : On utilise cookies() sans await, car dans ce contexte (Route Handler), il est synchrone.
+    const cookieStore = cookies();
+    const token = cookieStore.get('auth_token')?.value;
+
+    if (token) {
+      // --- CAS 1 : UTILISATEUR CONNECTÉ ---
+      const { payload } = await jwtVerify(token, secret);
+      const userId = payload.userId as string;
+      customer = await prisma.customer.findUnique({ where: { id: userId } });
+
+      if (!customer) {
+        // Si le token est valide mais que l'utilisateur n'existe plus en base
+        throw new Error('Client authentifié non trouvé.');
+      }
+
+    } else if (guestEmail) {
+      // --- CAS 2 : INVITÉ ---
+      customer = await prisma.customer.upsert({
+        where: { email: guestEmail },
+        update: {}, // Pas de mise à jour si l'email existe déjà, on l'utilise tel quel
+        create: {
+          email: guestEmail,
+          name: 'Client Invité',
+          // Un mot de passe aléatoire est requis par le schéma mais ne sera pas utilisable
+          hashed_password: randomBytes(16).toString('hex'),
+        },
+      });
+    } else {
+      // Ni token, ni email d'invité : impossible de continuer
+      return NextResponse.json({ message: 'Informations client manquantes pour la commande.' }, { status: 400 });
+    }
+
+    // --- LOGIQUE COMMUNE : Création de la commande et de la session Stripe ---
+    
+    // Trouve la première adresse de livraison ou en crée une de substitution
+    const shippingAddress = await prisma.address.findFirst({
+        where: { customerId: customer.id, type: 'SHIPPING' },
+    }) || await prisma.address.create({
+        data: {
+            customerId: customer.id,
+            type: 'SHIPPING',
+            line1: 'Adresse à compléter', city: 'Inconnue', postalCode: '00000', country: 'FR',
+        },
     });
 
-    // On crée une nouvelle adresse à chaque fois pour cet exemple.
-    // En production, on réutiliserait une adresse existante du client.
-    const address = await prisma.address.create({
-      data: {
-        customerId: customer.id,
-        type: 'SHIPPING',
-        line1: '123 Rue du Test',
-        city: 'Paris',
-        postalCode: '75001',
-        country: 'FR',
-      },
-    });
-    // --- FIN DE LA SOLUTION TEMPORAIRE ---
-
-
-    const totalCents = cartItems.reduce(
-      (acc, item) => acc + item.price_cents * item.quantity,
-      0
-    );
+    const totalCents = cartItems.reduce((acc, item) => acc + item.price_cents * item.quantity, 0);
 
     const newOrder = await prisma.order.create({
       data: {
         total_cents: totalCents,
         status: 'PENDING',
-        customerId: customer.id,          // <-- Utilise l'ID du client de substitution
-        shippingAddressId: address.id, // <-- Utilise l'ID de l'adresse réelle
-        billingAddressId: address.id,  // <-- On utilise la même pour la facturation
+        customerId: customer.id,
+        shippingAddressId: shippingAddress.id,
+        billingAddressId: shippingAddress.id, // Simplification pour l'instant
         items: {
           create: cartItems.map((item) => ({
             productId: item.productId,
-            variantId: item.variantId,
+            variantId: item.variant?.id,
             qty: item.quantity,
             price_cents: item.price_cents,
           })),
         },
       },
     });
-
+    
     const line_items = cartItems.map((item) => ({
       price_data: {
         currency: 'eur',
-        product_data: {
-          name: item.title,
-        },
+        product_data: { name: item.title },
         unit_amount: item.price_cents,
       },
       quantity: item.quantity,
     }));
-    
+
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: line_items,
+      line_items,
       mode: 'payment',
       success_url: `${siteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/cart?canceled=true`,
-      metadata: {
-        orderId: newOrder.id,
-      },
+      customer_email: customer.email,
+      metadata: { orderId: newOrder.id },
     });
-
+    
     if (!session.url) {
       throw new Error('La création de la session Stripe a échoué.');
     }
@@ -108,9 +127,7 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('[STRIPE_CHECKOUT_ERROR]', error);
-    return NextResponse.json(
-      { message: 'Une erreur est survenue lors de la création du paiement.' },
-      { status: 500 }
-    );
+    const errorMessage = error instanceof Error ? error.message : 'Une erreur interne est survenue.';
+    return NextResponse.json({ message: errorMessage }, { status: 500 });
   }
 }

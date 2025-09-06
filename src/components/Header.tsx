@@ -1,13 +1,25 @@
-// path: src/components/Header.tsx
-'use client'; // <-- Rendre ce composant interactif
+'use client';
 
 import Link from 'next/link';
-import { ShoppingBagIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useCart } from '@/lib/useCart'; // Importer notre hook de panier
+import { ShoppingBagIcon, UserIcon, ArrowRightOnRectangleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useCart } from '@/lib/useCart';
+import { useAuth } from '@/lib/useAuth'; // Importer le hook d'authentification
+import { useEffect } from 'react';
 
 const Header = () => {
-  // Récupérer le nombre total d'articles depuis le store Zustand
   const totalItems = useCart((state) => state.totalItems);
+  const { user, checkUserStatus, setUser } = useAuth(); // Utiliser le hook
+
+  // Vérifier le statut de l'utilisateur au chargement initial
+  useEffect(() => {
+    checkUserStatus();
+  }, [checkUserStatus]);
+
+  const handleLogout = async () => {
+    // Logique de déconnexion (supprimer le cookie)
+    await fetch('/api/auth/logout', { method: 'POST' });
+    setUser(null); // Mettre à jour l'état local
+  };
 
   return (
     <header className="sticky top-0 z-20 w-full border-b border-gray-200 bg-brand-light/80 backdrop-blur-md">
@@ -39,8 +51,22 @@ const Header = () => {
               </span>
             )}
           </Link>
+         {/* SECTION DYNAMIQUE D'AUTHENTIFICATION */}
+         {user ? (
+            <>
+              <Link href="/account" className="p-2 text-brand-dark hover:text-brand-gray">
+                <UserIcon className="h-6 w-6" />
+              </Link>
+              <button onClick={handleLogout} className="p-2 text-brand-dark hover:text-brand-gray">
+                 <ArrowRightOnRectangleIcon className="h-6 w-6" />
+              </button>
+            </>
+          ) : (
+            <Link href="/login" className="text-sm font-medium text-brand-dark hover:text-brand-gray">
+              Se connecter
+            </Link>
+          )}
         </div>
-
       </div>
     </header>
   );
