@@ -11,6 +11,7 @@ async function getFeaturedProducts() {
     take: 4,
     include: {
       images: { orderBy: { position: 'asc' }, take: 1 },
+      variants: true,
     },
   });
   return products;
@@ -115,7 +116,7 @@ export default async function HomePage() {
         </div>
         <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product as any} />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
         <div className="mt-16 text-center">

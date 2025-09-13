@@ -4,7 +4,6 @@ import prisma from '@/lib/prisma';
 import ProductCard from '@/components/ProductCard';
 import ProductFilters from '@/components/ProductFilters';
 import MobileFilters from '@/components/MobileFilters'; // Nouveau composant pour le mobile
-import { FunnelIcon } from '@heroicons/react/24/outline';
 import type { Product, ProductImage, Variant, Category } from '@prisma/client';
 
 type ProductWithDetails = Product & {

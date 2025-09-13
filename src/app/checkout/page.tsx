@@ -49,8 +49,9 @@ export default function CheckoutPage() {
 
       window.location.href = data.url;
 
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) { // CORRECTION : Retirer ': any'
+      const error = err instanceof Error ? err : new Error('Une erreur inconnue est survenue.');
+      setError(error.message);
       setIsProcessing(false);
     }
   };

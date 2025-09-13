@@ -46,9 +46,10 @@ export default function AuthForm({ mode }: AuthFormProps) {
       toast.success(isLogin ? 'Connexion réussie !' : 'Compte créé avec succès !');
       router.push('/products');
 
-    } catch (err: any) {
-      setError(err.message);
-      toast.error(err.message);
+    } catch (err) { // CORRECTION : Retirer ': any'
+      const error = err instanceof Error ? err : new Error('Une erreur est survenue.');
+      setError(error.message);
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }

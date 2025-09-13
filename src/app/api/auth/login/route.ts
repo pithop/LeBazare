@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     if (admin) {
       const passwordMatch = await bcrypt.compare(password, admin.hashed_password);
       if (passwordMatch) {
-        const { hashed_password, ...adminData } = admin;
+        const { hashed_password: _hashed_password, ...adminData } = admin;
         user = adminData;
         role = 'admin';
       }

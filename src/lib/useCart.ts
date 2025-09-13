@@ -99,7 +99,7 @@ export const useCart = create<CartState>()(
       name: 'cart-storage',
       storage: createJSONStorage(() => localStorage),
       // La réhydratation doit maintenant se faire avec une fonction externe au state
-      onRehydrateStorage: () => (state, error) => {
+      onRehydrateStorage: () => (state) => {
         if (state) {
           const { totalItems, totalCents } = state.items.reduce(
             (acc, item) => {
