@@ -2,15 +2,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// Le contexte inclut les paramètres dynamiques de la route, ici `slug`.
 export async function GET(
   request: NextRequest,
-  // Voici la correction. On accepte un 'context' et on en extrait les 'params'.
-  // C'est la manière la plus standard et robuste.
-  context: { params: { slug: string } }
+  { params }: { params: { slug: string } }
 ) {
   try {
-    const { slug } = context.params;
+    const { slug } = params;
 
     if (!slug) {
       return NextResponse.json(
@@ -32,7 +29,7 @@ export async function GET(
         variants: true,
         categories: {
           include: {
-            category: true, // Pour obtenir les détails de la catégorie
+            category: true,
           },
         },
       },
