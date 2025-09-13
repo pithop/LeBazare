@@ -2,7 +2,6 @@
 
 import { POST } from './route';
 import { NextRequest } from 'next/server';
-import { headers } from 'next/headers';
 import prisma from '@/lib/prisma';
 import Stripe from 'stripe';
 
@@ -49,8 +48,8 @@ jest.mock('stripe', () => {
 // --- Préparation des données de test ---
 
 // On type explicitement notre mock de Prisma pour avoir l'autocomplétion
-const prismaMock = prisma as jest.Mocked<typeof prisma> & { _mockTx: any };
-const mockTx = prismaMock._mockTx;
+const prismaMock = prisma as jest.Mocked<typeof prisma> & { _mockTx: unknown };
+const mockTx = prismaMock._mockTx as any;
 
 // Création d'un événement Stripe simulé et valide
 const mockStripeEvent = {

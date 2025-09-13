@@ -36,7 +36,7 @@ export default async function HomePage() {
             style={{ animationDelay: '0.2s', opacity: 0 }} // opacity:0 est essentiel pour que l'animation soit visible
           >
             <h1 className="text-4xl font-bold tracking-tight text-brand-dark md:text-5xl">
-              L'art de vivre bohème.
+              L&apos;art de vivre bohème.
             </h1>
             <p className="mt-4 text-lg leading-relaxed text-brand-gray">
               Chaque pièce est une promesse, un voyage. Découvrez des objets faits main qui ont une âme.

@@ -1,9 +1,10 @@
-// path: /app/api/auth/login/route.ts
+// path: src/app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { setCookie } from 'cookies-next';
+import type { Admin, Customer } from '@prisma/client'; // AJOUT : Importer les types
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,26 +17,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let user: any = null;
+    // CORRECTION : Remplacer 'any' par un type plus précis
+    let user: Omit<Admin, 'hashed_password'> | Omit<Customer, 'hashed_password'> | null = null;
     let role: 'admin' | 'customer' | null = null;
     
-    // 1. Chercher un admin
     const admin = await prisma.admin.findUnique({ where: { email } });
     if (admin) {
       const passwordMatch = await bcrypt.compare(password, admin.hashed_password);
       if (passwordMatch) {
-        user = admin;
+        const { hashed_password, ...adminData } = admin;
+        user = adminData;
         role = 'admin';
       }
     }
 
-    // 2. Si pas d'admin, chercher un client
     if (!user) {
         const customer = await prisma.customer.findUnique({ where: { email } });
         if (customer) {
-          const passwordMatch = await bcrypt.compare(password, customer.hashed_password); // <-- ON VÉRIFIE LE HASH DU CLIENT
+          const passwordMatch = await bcrypt.compare(password, customer.hashed_password);
           if (passwordMatch) {
-            const { hashed_password, ...customerData } = customer;
+            // CORRECTION : Préfixer la variable inutilisée avec '_'
+            const { hashed_password: _hashed_password, ...customerData } = customer;
             user = customerData;
             role = 'customer';
           }
@@ -49,18 +51,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // --- Génération du Token JWT ---
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: role },
       process.env.JWT_SECRET!,
-      { expiresIn: '7d' } // Le token expire dans 7 jours
+      { expiresIn: '7d' }
     );
     
-    // --- Création de la réponse et stockage du cookie ---
     const response = NextResponse.json({
-        id: user.id,
-        email: user.email,
-        name: user.name,
+        ...user, // user contient déjà les bonnes données
         role: role
     }, { status: 200 });
 
@@ -70,7 +68,7 @@ export async function POST(request: NextRequest) {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 60 * 60 * 24 * 7, // 7 jours
+        maxAge: 60 * 60 * 24 * 7,
         path: '/',
     });
 

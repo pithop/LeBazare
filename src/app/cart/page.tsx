@@ -56,7 +56,7 @@ export default function CartPage() {
           Votre panier est vide
         </h1>
         <p className="mt-2 text-text-muted">
-          Il semble que vous n'ayez encore rien ajouté.
+          Il semble que vous n&apos;ayez encore rien ajouté.
         </p>
         <div className="mt-6">
           <Link href="/products" className="btn-primary">
@@ -135,7 +135,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex items-center justify-between text-sm text-gray-600">
                   <dt>Livraison</dt>
-                  <dd>Calculée à l'étape suivante</dd>
+                  <dd>Calculée à l&apos;étape suivante</dd>
                 </div>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                   <dt className="text-base font-bold text-gray-900">Total</dt>

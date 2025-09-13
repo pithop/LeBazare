@@ -17,10 +17,10 @@ export default function Error({
   return (
     <div className="container-page text-center">
       <h2 className="text-2xl font-bold font-serif text-brand-dark mt-12">
-        Oups, quelque chose s'est mal passé !
+        Oups, quelque chose s&apos;est mal passé !
       </h2>
       <p className="mt-4 text-brand-gray">
-        Nous avons été notifiés de l'erreur et travaillons à sa résolution.
+        Nous avons été notifiés de l&apos;erreur et travaillons à sa résolution.
       </p>
       <button
         onClick={() => reset()}

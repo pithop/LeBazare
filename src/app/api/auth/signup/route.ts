@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    const { hashed_password, ...customerData } = newCustomer;
+    const { hashed_password: _hashed_password, ...customerData } = newCustomer;
 
     return NextResponse.json(
       { customer: customerData, message: 'Compte client créé avec succès.' },

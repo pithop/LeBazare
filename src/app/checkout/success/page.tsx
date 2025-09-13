@@ -28,7 +28,7 @@ function SuccessContent() {
         Merci pour votre commande !
       </h1>
       <p className="mt-4 text-lg text-text-muted">
-        Votre paiement a été accepté. Un email de confirmation va vous être envoyé d'ici quelques instants.
+        Votre paiement a été accepté. Un email de confirmation va vous être envoyé d&apos;ici quelques instants.
       </p>
       <div className="mt-8">
         <Link href="/products" className="btn-primary">

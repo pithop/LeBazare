@@ -16,9 +16,10 @@ export async function POST(request: NextRequest) {
   // --- 1. Sécurité : Vérification de la signature du webhook ---
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-  } catch (err: any) {
-    console.error(`❌ Erreur de vérification du webhook: ${err.message}`);
-    return NextResponse.json({ message: `Webhook Error: ${err.message}` }, { status: 400 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown webhook error';
+    console.error(`❌ Erreur de vérification du webhook: ${message}`);
+    return NextResponse.json({ message: `Webhook Error: ${message}` }, { status: 400 });
   }
 
   // --- 2. Traitement des événements ---
