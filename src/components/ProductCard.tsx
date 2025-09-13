@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { formatCents } from '@/lib/money';
 import type { Product, ProductImage, Variant } from '@prisma/client';
 
-// On enrichit le type pour inclure les variants
 type ProductWithVariants = Product & {
   images: ProductImage[];
   variants: Variant[];
@@ -17,9 +16,12 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const firstImage = product.images?.[0];
   const hasVariants = product.variants && product.variants.length > 0;
+  
+  // Le texte du bouton change en fonction de la présence de variantes
+  const buttonText = hasVariants ? 'Choisir des options' : 'Voir le produit';
 
   return (
-    <div className="group text-left">
+    <div className="group text-left animate-fadeInUp" style={{ opacity: 0 }}>
       <Link href={`/products/${product.slug}`}>
         <div className="relative aspect-square w-full overflow-hidden rounded-md bg-gray-100">
           {firstImage ? (
@@ -28,7 +30,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               alt={firstImage.alt || product.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover transition-opacity duration-300 group-hover:opacity-80"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center">
@@ -38,7 +40,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       </Link>
       
-      <div className="mt-4">
+      <div className="mt-4 flex flex-col">
         <h3 className="text-md text-brand-dark">
           <Link href={`/products/${product.slug}`}>
             {product.title}
@@ -53,7 +55,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             href={`/products/${product.slug}`}
             className="w-full text-center inline-block border border-gray-300 px-4 py-2 text-sm font-medium text-brand-dark transition-colors hover:bg-brand-dark hover:text-white"
           >
-            {hasVariants ? 'Choisir des options' : 'Ajouter au panier'}
+            {buttonText}
           </Link>
         </div>
       </div>

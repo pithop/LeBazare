@@ -6,13 +6,15 @@ export default function Footer() {
   return (
     <footer className="bg-white border-t border-gray-200">
       <div className="container-page py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        {/* On ajoute text-center sur mobile et text-left à partir de md */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left">
+
           {/* Section Newsletter */}
           <div className="md:col-span-2">
             <h3 className="font-semibold text-brand-dark">Rejoignez notre univers</h3>
             <p className="mt-2 text-sm text-brand-gray">Recevez nos offres exclusives et découvrez nos nouveautés en avant-première.</p>
-            <form className="mt-4 flex">
-              <input type="email" placeholder="Votre email" className="form-input flex-grow rounded-r-none" />
+            <form className="mt-4 flex max-w-md mx-auto md:mx-0">
+              <input type="email" placeholder="Votre email" className="form-input flex-grow rounded-r-none" required />
               <button type="submit" className="p-3 bg-brand-dark text-white rounded-r-md hover:bg-brand-gray">
                 <ArrowRightIcon className="h-5 w-5" />
               </button>
