@@ -49,7 +49,10 @@ jest.mock('stripe', () => {
 
 // On type explicitement notre mock de Prisma pour avoir l'autocomplétion
 const prismaMock = prisma as jest.Mocked<typeof prisma> & { _mockTx: unknown };
-const mockTx = prismaMock._mockTx as any;
+const mockTx = prismaMock._mockTx as {
+  order: { findUnique: jest.Mock; update: jest.Mock };
+  variant: { update: jest.Mock };
+};
 
 // Création d'un événement Stripe simulé et valide
 const mockStripeEvent = {
