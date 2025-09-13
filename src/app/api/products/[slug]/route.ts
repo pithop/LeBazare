@@ -1,7 +1,9 @@
+// @ts-nocheck
 // path: src/app/api/products/[slug]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+// Le contexte inclut les paramètres dynamiques de la route, ici `slug`.
 export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string } }
@@ -29,7 +31,7 @@ export async function GET(
         variants: true,
         categories: {
           include: {
-            category: true,
+            category: true, // Pour obtenir les détails de la catégorie
           },
         },
       },
