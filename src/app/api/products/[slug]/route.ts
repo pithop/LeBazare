@@ -1,15 +1,15 @@
-// path: app/api/products/[slug]/route.ts
+// path: src/app/api/products/[slug]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 // Le contexte inclut les paramètres dynamiques de la route, ici `slug`.
 export async function GET(
   request: NextRequest,
+  // CORRECTION SUR LA LIGNE SUIVANTE :
   { params }: { params: { slug: string } }
 ) {
   try {
-    // CORRECTION : On attend la résolution de params
-    const { slug } = await params;
+    const { slug } = params;
 
     if (!slug) {
       return NextResponse.json(
