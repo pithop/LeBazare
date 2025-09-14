@@ -49,9 +49,9 @@ function Breadcrumbs({ product }: { product: ProductWithDetails }) {
     )
 }
 
-export default async function ProductPage({ params }: { params: { slug: string } }) {
-  // CORRECTION : On retire 'await' car params n'est pas une Promise dans un composant Page
-  const { slug } = params;
+export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  // Dans Next.js 15, params est une Promise qui doit être awaitée
+  const { slug } = await params;
   const data = await getProduct(slug);
 
   if (!data) {
@@ -66,10 +66,8 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
         <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-10">
           
-          {/* Colonne de gauche : Galerie d'images */}
           <ProductGallery images={product.images} defaultAlt={product.title} />
 
-          {/* Colonne de droite : Informations et Achat */}
           <div className="flex flex-col">
             <h1 className="text-3xl md:text-4xl font-bold font-serif text-gray-900">
               {product.title}
