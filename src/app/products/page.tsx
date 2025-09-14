@@ -3,7 +3,7 @@ import Link from 'next/link';
 import prisma from '@/lib/prisma';
 import ProductCard from '@/components/ProductCard';
 import ProductFilters from '@/components/ProductFilters';
-import MobileFilters from '@/components/MobileFilters'; // Nouveau composant pour le mobile
+import MobileFilters from '@/components/MobileFilters';
 import type { Product, ProductImage, Variant, Category } from '@prisma/client';
 
 type ProductWithDetails = Product & {
@@ -18,7 +18,6 @@ interface ApiResponse {
   totalPages: number;
 }
 
-// Les fonctions de fetch de données restent les mêmes, elles sont très bien.
 async function getProducts(
   page: number,
   category?: string,
@@ -48,15 +47,18 @@ async function getCategories(): Promise<Category[]> {
   });
 }
 
-// Le Server Component principal, maintenant avec la nouvelle structure.
+// CORRECTION : La signature de la fonction est mise à jour pour attendre une Promise
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const currentPage = Number(searchParams.page) || 1;
-  const currentCategory = typeof searchParams.category === 'string' ? searchParams.category : undefined;
-  const currentSort = typeof searchParams.sort === 'string' ? searchParams.sort : undefined;
+  // CORRECTION : On attend que la Promise se résolve
+  const resolvedSearchParams = await searchParams;
+
+  const currentPage = Number(resolvedSearchParams.page) || 1;
+  const currentCategory = typeof resolvedSearchParams.category === 'string' ? resolvedSearchParams.category : undefined;
+  const currentSort = typeof resolvedSearchParams.sort === 'string' ? resolvedSearchParams.sort : undefined;
 
   const [data, categories] = await Promise.all([
     getProducts(currentPage, currentCategory, currentSort),
@@ -82,16 +84,13 @@ export default async function ProductsPage({
         <p className="mt-2 text-brand-gray">Découvrez nos trésors faits main.</p>
       </div>
 
-      {/* Bouton pour filtres sur mobile - géré par un Client Component */}
       <MobileFilters categories={categories} totalProducts={data.total} />
 
       <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
-        {/* Barre latérale pour les filtres (visible sur grand écran) */}
         <aside className="hidden lg:block lg:col-span-1">
           <ProductFilters categories={categories} totalProducts={data.total} />
         </aside>
 
-        {/* Section principale pour les produits */}
         <div className="lg:col-span-3">
           {data.items.length === 0 ? (
             <div className="text-center py-20">
@@ -105,7 +104,6 @@ export default async function ProductsPage({
             </div>
           )}
 
-          {/* Pagination */}
           {data.totalPages > 1 && (
              <div className="mt-12 flex items-center justify-center gap-4">
                <Link
