@@ -30,11 +30,10 @@ export default async function HomePage() {
     <>
       {/* Section Héros "Moodboard" */}
       <section className="container-page py-12 md:py-16">
-        <div className="grid h-[70vh] grid-cols-1 gap-6 lg:grid-cols-3 lg:grid-rows-2">
-          {/* Cellule de Texte avec animation */}
+        <div className="grid grid-cols-1 grid-rows-4 gap-6 lg:grid-cols-3 lg:grid-rows-2 lg:h-[70vh]">
           <div
-            className="flex animate-fadeInUp flex-col justify-center rounded-lg bg-white/60 p-8 shadow-sm backdrop-blur-sm lg:row-span-2"
-            style={{ animationDelay: '0.2s', opacity: 0 }} // opacity:0 est essentiel pour que l'animation soit visible
+            className="flex row-span-1 min-h-[40vh] animate-fadeInUp flex-col justify-center rounded-lg bg-white/60 p-8 shadow-sm backdrop-blur-sm lg:row-span-2"
+            style={{ animationDelay: '0.2s', opacity: 0 }}
           >
             <h1 className="text-4xl font-bold tracking-tight text-brand-dark md:text-5xl">
               L&apos;art de vivre bohème.
@@ -46,19 +45,17 @@ export default async function HomePage() {
               Explorer la collection
             </Link>
           </div>
-
-          {/* Images avec effet de survol */}
-          <div className="relative h-full w-full overflow-hidden rounded-lg shadow-md transition-transform duration-500 ease-in-out hover:scale-[1.03]">
+          <div className="relative h-64 w-full overflow-hidden rounded-lg shadow-md transition-transform duration-500 ease-in-out hover:scale-[1.03] lg:h-full">
             <Image
               src="https://res.cloudinary.com/dggbfnfdl/image/upload/v1757854753/Gemini_Generated_Image_dp0xqhdp0xqhdp0x_jnaedt.png"
               alt="Suspension en raphia naturel dans un intérieur lumineux"
               fill
               sizes="(max-width: 1024px) 100vw, 33vw"
               className="object-cover object-center"
-              priority // Important pour le LCP (Largest Contentful Paint)
+              priority
             />
           </div>
-          <div className="relative h-full w-full overflow-hidden rounded-lg shadow-md transition-transform duration-500 ease-in-out hover:scale-[1.03]">
+          <div className="relative h-64 w-full overflow-hidden rounded-lg shadow-md transition-transform duration-500 ease-in-out hover:scale-[1.03] lg:h-full">
             <Image
               src="https://res.cloudinary.com/dggbfnfdl/image/upload/v1757855093/il_600x600.6834663095_jjfy_evhqkw.avif"
               alt="Miroir doré ovale artisanal"
@@ -67,7 +64,7 @@ export default async function HomePage() {
               className="object-cover object-center"
             />
           </div>
-          <div className="relative h-full w-full overflow-hidden rounded-lg shadow-md transition-transform duration-500 ease-in-out lg:col-span-2 hover:scale-[1.03]">
+          <div className="relative h-64 w-full overflow-hidden rounded-lg shadow-md transition-transform duration-500 ease-in-out hover:scale-[1.03] lg:h-full lg:col-span-2">
             <Image
               src="https://res.cloudinary.com/dggbfnfdl/image/upload/v1757855298/il_600x600.6530837440_jp5j_ffutcl.webp"
               alt="Ambiance intérieure avec des paniers et tabourets artisanaux"
