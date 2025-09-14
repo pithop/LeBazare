@@ -1,6 +1,6 @@
 // path: src/app/api/auth/me/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers'; // CORRECTION : On utilise la méthode native de Next.js
+import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
 
@@ -12,8 +12,9 @@ interface JwtPayload {
 
 export async function GET(request: NextRequest) {
   try {
-    // CORRECTION : On utilise cookies() pour récupérer le token de manière fiable
-    const token = cookies().get('auth_token')?.value;
+    // CORRECTION : On attend la résolution de la Promise des cookies
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth_token')?.value;
 
     if (!token) {
       return NextResponse.json({ message: 'Non autorisé' }, { status: 401 });
@@ -47,7 +48,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ user: { ...user, role: payload.role } });
 
   } catch (error) {
-    // Ce catch gère les erreurs de jwt.verify (token invalide/expiré) et autres erreurs
     return NextResponse.json({ message: 'Token invalide ou expiré' }, { status: 401 });
   }
 }
