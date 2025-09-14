@@ -50,7 +50,8 @@ function Breadcrumbs({ product }: { product: ProductWithDetails }) {
 }
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
-  const { slug } = await params;
+  // CORRECTION : On retire 'await' car params n'est pas une Promise dans un composant Page
+  const { slug } = params;
   const data = await getProduct(slug);
 
   if (!data) {
