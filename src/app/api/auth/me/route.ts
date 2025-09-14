@@ -1,10 +1,9 @@
-// path: /app/api/auth/me/route.ts
+// path: src/app/api/auth/me/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getCookie } from 'cookies-next';
+import { cookies } from 'next/headers'; // CORRECTION : On utilise la méthode native de Next.js
 import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
 
-// L'interface reste la même
 interface JwtPayload {
   userId: string;
   email: string;
@@ -13,7 +12,8 @@ interface JwtPayload {
 
 export async function GET(request: NextRequest) {
   try {
-    const token = getCookie('auth_token', { req: request });
+    // CORRECTION : On utilise cookies() pour récupérer le token de manière fiable
+    const token = cookies().get('auth_token')?.value;
 
     if (!token) {
       return NextResponse.json({ message: 'Non autorisé' }, { status: 401 });
@@ -21,14 +21,11 @@ export async function GET(request: NextRequest) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
 
-    // --- VALIDATION DU PAYLOAD (LA CORRECTION EST ICI) ---
     if (typeof decoded !== 'object' || !('userId' in decoded) || !('role' in decoded)) {
       throw new Error('Token malformé');
     }
     
-    // À ce stade, TypeScript sait que `decoded` a les bonnes propriétés.
     const payload = decoded as JwtPayload;
-
     let user = null;
 
     if (payload.role === 'admin') {
@@ -48,7 +45,9 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({ user: { ...user, role: payload.role } });
+
   } catch (error) {
+    // Ce catch gère les erreurs de jwt.verify (token invalide/expiré) et autres erreurs
     return NextResponse.json({ message: 'Token invalide ou expiré' }, { status: 401 });
   }
 }
