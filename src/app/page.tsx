@@ -69,7 +69,7 @@ export default async function HomePage() {
           </div>
           <div className="relative h-full w-full overflow-hidden rounded-lg shadow-md transition-transform duration-500 ease-in-out lg:col-span-2 hover:scale-[1.03]">
             <Image
-              src="https://res.cloudinary.com/dggbfnfdl/image/upload/v1757855093/il_600x600.7000129971_3k86_pg3o4g.webp"
+              src="https://res.cloudinary.com/dggbfnfdl/image/upload/v1757855298/il_600x600.6530837440_jp5j_ffutcl.webp"
               alt="Ambiance intérieure avec des paniers et tabourets artisanaux"
               fill
               sizes="(max-width: 1024px) 100vw, 66vw"
