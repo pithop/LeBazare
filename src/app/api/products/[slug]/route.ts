@@ -1,15 +1,13 @@
-// @ts-nocheck
-// path: src/app/api/products/[slug]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// Le contexte inclut les paramètres dynamiques de la route, ici `slug`.
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    // Dans Next.js 15, params est une Promise qui doit être awaitée
+    const { slug } = await params;
 
     if (!slug) {
       return NextResponse.json(
@@ -31,7 +29,7 @@ export async function GET(
         variants: true,
         categories: {
           include: {
-            category: true, // Pour obtenir les détails de la catégorie
+            category: true,
           },
         },
       },
