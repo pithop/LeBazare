@@ -32,9 +32,9 @@ export async function POST(request: NextRequest) {
     }
 
     let customer;
-    
-    // CORRECTION : On utilise cookies() sans await, car dans ce contexte (Route Handler), il est synchrone.
-    const cookieStore = cookies();
+
+    // CORRECTION : On ajoute 'await' pour attendre la résolution de la Promise
+    const cookieStore = await cookies();
     const token = cookieStore.get('auth_token')?.value;
 
     if (token) {
@@ -44,7 +44,6 @@ export async function POST(request: NextRequest) {
       customer = await prisma.customer.findUnique({ where: { id: userId } });
 
       if (!customer) {
-        // Si le token est valide mais que l'utilisateur n'existe plus en base
         throw new Error('Client authentifié non trouvé.');
       }
 
@@ -52,22 +51,18 @@ export async function POST(request: NextRequest) {
       // --- CAS 2 : INVITÉ ---
       customer = await prisma.customer.upsert({
         where: { email: guestEmail },
-        update: {}, // Pas de mise à jour si l'email existe déjà, on l'utilise tel quel
+        update: {},
         create: {
           email: guestEmail,
           name: 'Client Invité',
-          // Un mot de passe aléatoire est requis par le schéma mais ne sera pas utilisable
           hashed_password: randomBytes(16).toString('hex'),
         },
       });
     } else {
-      // Ni token, ni email d'invité : impossible de continuer
       return NextResponse.json({ message: 'Informations client manquantes pour la commande.' }, { status: 400 });
     }
 
-    // --- LOGIQUE COMMUNE : Création de la commande et de la session Stripe ---
-    
-    // Trouve la première adresse de livraison ou en crée une de substitution
+    // --- LOGIQUE COMMUNE ---
     const shippingAddress = await prisma.address.findFirst({
         where: { customerId: customer.id, type: 'SHIPPING' },
     }) || await prisma.address.create({
@@ -86,7 +81,7 @@ export async function POST(request: NextRequest) {
         status: 'PENDING',
         customerId: customer.id,
         shippingAddressId: shippingAddress.id,
-        billingAddressId: shippingAddress.id, // Simplification pour l'instant
+        billingAddressId: shippingAddress.id,
         items: {
           create: cartItems.map((item) => ({
             productId: item.productId,
