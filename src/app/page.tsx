@@ -60,7 +60,7 @@ export default async function HomePage() {
           </div>
           <div className="relative h-full w-full overflow-hidden rounded-lg shadow-md transition-transform duration-500 ease-in-out hover:scale-[1.03]">
             <Image
-              src="https://res.cloudinary.com/dggbfnfdl/image/upload/v1757854754/Gemini_Generated_Image_mmaogfmmaogfmmao_mukgwr.png"
+              src="https://res.cloudinary.com/dggbfnfdl/image/upload/v1757855093/il_600x600.6834663095_jjfy_evhqkw.avif"
               alt="Miroir doré ovale artisanal"
               fill
               sizes="(max-width: 1024px) 100vw, 33vw"
@@ -69,7 +69,7 @@ export default async function HomePage() {
           </div>
           <div className="relative h-full w-full overflow-hidden rounded-lg shadow-md transition-transform duration-500 ease-in-out lg:col-span-2 hover:scale-[1.03]">
             <Image
-              src="https://res.cloudinary.com/dggbfnfdl/image/upload/v1757854752/WhatsApp_Image_2025-09-06_at_20.22.31_f90eyy.jpg"
+              src="https://res.cloudinary.com/dggbfnfdl/image/upload/v1757855093/il_600x600.7000129971_3k86_pg3o4g.webp"
               alt="Ambiance intérieure avec des paniers et tabourets artisanaux"
               fill
               sizes="(max-width: 1024px) 100vw, 66vw"
