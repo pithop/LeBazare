@@ -9,8 +9,9 @@ import {
   UserIcon,
   ArrowRightOnRectangleIcon,
   MagnifyingGlassIcon,
-  Bars3Icon, // <- Icône Hamburger
-  XMarkIcon,  // <- Icône de fermeture
+  Bars3Icon,
+  XMarkIcon,
+  WrenchScrewdriverIcon, // AJOUT : Icône pour l'admin
 } from '@heroicons/react/24/outline';
 import { useCart } from '@/lib/useCart';
 import { useAuth } from '@/lib/useAuth';
@@ -85,10 +86,16 @@ const Header = () => {
           <div className="hidden sm:flex sm:items-center sm:gap-4">
             {user ? (
               <>
-                <Link href="/account" className="p-2 text-brand-dark hover:text-brand-gray">
+                {/* AJOUT : Lien Admin pour la vue Desktop */}
+                {user.role === 'admin' && (
+                  <Link href="/admin/dashboard" title="Panneau Admin" className="p-2 text-brand-dark hover:text-indigo-600">
+                    <WrenchScrewdriverIcon className="h-6 w-6" />
+                  </Link>
+                )}
+                <Link href="/account" title="Mon Compte" className="p-2 text-brand-dark hover:text-brand-gray">
                   <UserIcon className="h-6 w-6" />
                 </Link>
-                <button onClick={handleLogout} className="p-2 text-brand-dark hover:text-brand-gray">
+                <button onClick={handleLogout} title="Déconnexion" className="p-2 text-brand-dark hover:text-brand-gray">
                    <ArrowRightOnRectangleIcon className="h-6 w-6" />
                 </button>
               </>
@@ -138,9 +145,16 @@ const Header = () => {
                   </div>
                   <div className="py-6">
                     {user ? (
-                         <div className="flex items-center gap-x-6">
+                         <div className="space-y-2">
+                             {/* AJOUT : Lien Admin pour le menu Mobile */}
+                             {user.role === 'admin' && (
+                                <Link href="/admin/dashboard" onClick={() => setMobileMenuOpen(false)} className="-mx-3 flex items-center gap-3 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-indigo-600 hover:bg-gray-50">
+                                    <WrenchScrewdriverIcon className="h-6 w-6" />
+                                    Panneau Admin
+                                </Link>
+                             )}
                              <Link href="/account" onClick={() => setMobileMenuOpen(false)} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Mon Compte</Link>
-                             <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Déconnexion</button>
+                             <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="w-full text-left -mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Déconnexion</button>
                          </div>
                     ) : (
                         <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
