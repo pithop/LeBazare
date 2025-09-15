@@ -20,7 +20,7 @@ const slugify = (text: string) =>
 
 // --- Configuration Cloudinary ---
 // IMPORTANT : Remplacez ces valeurs par VOS informations
-const CLOUDINARY_UPLOAD_PRESET = 'ml_default'; // Le nom de votre "Upload Preset" Unsigned
+const CLOUDINARY_UPLOAD_PRESET = 'Lebzare'; // Le nom de votre "Upload Preset" Unsigned
 const CLOUDINARY_CLOUD_NAME = 'dggbfnfdl';   // Votre "Cloud Name"
 
 type Variant = { id: number; name: string; stock: number };
@@ -93,6 +93,7 @@ export default function ProductForm({ categories, onProductCreated }: { categori
       );
 
       // --- CORRECTION CI-DESSOUS ---
+      // On utilise FormData pour lire les valeurs de manière sûre
       const formData = new FormData(e.currentTarget);
       const productData = {
         title: formData.get('title') as string,
