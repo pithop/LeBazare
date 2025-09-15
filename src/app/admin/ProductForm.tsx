@@ -75,7 +75,7 @@ export default function ProductForm({ categories, onProductCreated }: { categori
     }
     setIsSubmitting(true);
     toast.loading('Création du produit en cours...');
-
+  
     try {
       const uploadedImages = await Promise.all(
         files.map(async (file) => {
@@ -91,9 +91,8 @@ export default function ProductForm({ categories, onProductCreated }: { categori
           return { url: data.secure_url, publicId: data.public_id };
         })
       );
-
-      // --- CORRECTION CI-DESSOUS ---
-      // On utilise FormData pour lire les valeurs de manière sûre
+  
+      // Use FormData to safely read form values
       const formData = new FormData(e.currentTarget);
       const productData = {
         title: formData.get('title') as string,
@@ -104,19 +103,18 @@ export default function ProductForm({ categories, onProductCreated }: { categori
         images: uploadedImages,
         variants: variants.map(({ name, stock }) => ({ name, stock })),
       };
-      // --- FIN DE LA CORRECTION ---
-
+  
       const response = await fetch('/api/admin/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(productData),
       });
-
+  
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || 'La création a échoué.');
       }
-
+  
       toast.dismiss();
       toast.success('Produit créé avec succès !');
       onProductCreated();
