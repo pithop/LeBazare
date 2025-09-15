@@ -18,13 +18,14 @@ const slugify = (text: string) =>
     .replace(/[^\w-]+/g, '')
     .replace(/--+/g, '-');
 
-const CLOUDINARY_UPLOAD_PRESET = 'ml_default';
-const CLOUDINARY_CLOUD_NAME = 'dggbfnfdl';
+// --- Configuration Cloudinary ---
+// IMPORTANT : Remplacez ces valeurs par VOS informations
+const CLOUDINARY_UPLOAD_PRESET = 'ml_default'; // Le nom de votre "Upload Preset" Unsigned
+const CLOUDINARY_CLOUD_NAME = 'dggbfnfdl';   // Votre "Cloud Name"
 
 type Variant = { id: number; name: string; stock: number };
 
 export default function ProductForm({ categories, onProductCreated }: { categories: Category[]; onProductCreated: () => void; }) {
-  const router = useRouter();
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [files, setFiles] = useState<File[]>([]);
