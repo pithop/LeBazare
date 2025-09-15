@@ -8,13 +8,13 @@ import {
   ShoppingBagIcon,
   UserIcon,
   ArrowRightOnRectangleIcon,
-  MagnifyingGlassIcon,
   Bars3Icon,
   XMarkIcon,
-  WrenchScrewdriverIcon, // AJOUT : Icône pour l'admin
+  WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline';
 import { useCart } from '@/lib/useCart';
 import { useAuth } from '@/lib/useAuth';
+import Search from './Search'; // AJOUT : Importer le composant Search
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -39,7 +39,6 @@ const Header = () => {
     <header className="sticky top-0 z-20 w-full border-b border-gray-200 bg-brand-light/80 backdrop-blur-md">
       <div className="container-page flex h-20 items-center justify-between">
         
-        {/* Navigation principale pour Desktop */}
         <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
           {navLinks.map((link) => (
               <Link key={link.name} href={link.href} className="text-brand-dark hover:text-brand-gray">
@@ -48,7 +47,6 @@ const Header = () => {
           ))}
         </nav>
         
-        {/* Bouton Hamburger pour Mobile */}
         <div className="flex items-center md:hidden">
             <button
               type="button"
@@ -60,19 +58,17 @@ const Header = () => {
             </button>
         </div>
 
-
-        {/* Logo au centre */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:relative md:left-0 md:top-0 md:translate-x-0 md:translate-y-0">
           <Link href="/" className="text-2xl font-serif font-bold text-brand-dark">
             LeBazare
           </Link>
         </div>
 
-        {/* Icônes de droite */}
         <div className="flex items-center gap-4">
-          <button aria-label="Rechercher" className="p-2 text-brand-dark hover:text-brand-gray hidden sm:block">
-            <MagnifyingGlassIcon className="h-6 w-6" />
-          </button>
+          {/* CORRECTION : Remplacer le bouton par le composant Search */}
+          <div className="hidden sm:block">
+            <Search />
+          </div>
           
           <Link href="/cart" aria-label="Panier" className="relative p-2 text-brand-dark hover:text-brand-gray">
             <ShoppingBagIcon className="h-6 w-6" />
@@ -86,7 +82,6 @@ const Header = () => {
           <div className="hidden sm:flex sm:items-center sm:gap-4">
             {user ? (
               <>
-                {/* AJOUT : Lien Admin pour la vue Desktop */}
                 {user.role === 'admin' && (
                   <Link href="/admin/dashboard" title="Panneau Admin" className="p-2 text-brand-dark hover:text-indigo-600">
                     <WrenchScrewdriverIcon className="h-6 w-6" />
@@ -108,7 +103,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Panneau du menu mobile (avec Headless UI) */}
       <Transition.Root show={mobileMenuOpen} as={Fragment}>
         <Dialog as="div" className="md:hidden" onClose={setMobileMenuOpen}>
           <div className="fixed inset-0 z-30" />
@@ -137,6 +131,10 @@ const Header = () => {
               <div className="mt-6 flow-root">
                 <div className="-my-6 divide-y divide-gray-500/10">
                   <div className="space-y-2 py-6">
+                    {/* AJOUT : Barre de recherche pour le menu mobile */}
+                    <div className="px-3">
+                      <Search />
+                    </div>
                     {navLinks.map((link) => (
                        <Link key={link.name} href={link.href} onClick={() => setMobileMenuOpen(false)} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                            {link.name}
@@ -146,7 +144,6 @@ const Header = () => {
                   <div className="py-6">
                     {user ? (
                          <div className="space-y-2">
-                             {/* AJOUT : Lien Admin pour le menu Mobile */}
                              {user.role === 'admin' && (
                                 <Link href="/admin/dashboard" onClick={() => setMobileMenuOpen(false)} className="-mx-3 flex items-center gap-3 rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-indigo-600 hover:bg-gray-50">
                                     <WrenchScrewdriverIcon className="h-6 w-6" />

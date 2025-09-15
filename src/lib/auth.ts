@@ -4,10 +4,7 @@ import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
 
 export async function verifyAdmin(request: NextRequest) {
-  // CORRECTION : On attend que la Promise se résolve pour obtenir le 'cookie store'
-  const cookieStore = await cookies();
-  const token = cookieStore.get('auth_token')?.value;
-
+  const token = (await cookies()).get('auth_token')?.value;
   if (!token) return null;
 
   try {
@@ -15,7 +12,7 @@ export async function verifyAdmin(request: NextRequest) {
     const { payload } = await jwtVerify(token, secret);
 
     if (payload.role === 'admin') {
-      return payload; // Retourne les infos de l'admin si la vérification est réussie
+      return payload; // Succès : retourne les infos de l'admin
     }
     return null;
   } catch (e) {

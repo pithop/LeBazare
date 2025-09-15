@@ -5,21 +5,24 @@ import { HomeIcon, ShoppingBagIcon, UsersIcon } from '@heroicons/react/24/outlin
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 font-sans">
       <aside className="w-64 flex-shrink-0 bg-gray-800 text-white flex flex-col">
-        <div className="h-16 flex items-center justify-center text-2xl font-bold font-serif">LeBazare</div>
+        <div className="h-20 flex items-center justify-center text-2xl font-bold font-serif text-white">LeBazare</div>
         <nav className="flex-grow p-4">
-          <ul>
-            <li><Link href="/admin/dashboard" className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-all hover:text-white hover:bg-gray-700"><HomeIcon className="h-5 w-5" />Dashboard</Link></li>
-            <li><Link href="/admin/products" className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-all hover:text-white hover:bg-gray-700"><ShoppingBagIcon className="h-5 w-5" />Produits</Link></li>
-            {/* Liens pour futures fonctionnalités */}
-            <li className="opacity-50"><span className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500"><UsersIcon className="h-5 w-5" />Commandes</span></li>
+          <ul className="space-y-2">
+            <li><Link href="/admin/dashboard" className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-300 transition-all hover:text-white hover:bg-gray-700"><HomeIcon className="h-5 w-5" />Tableau de bord</Link></li>
+            <li><Link href="/admin/products" className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-300 transition-all hover:text-white hover:bg-gray-700"><ShoppingBagIcon className="h-5 w-5" />Produits</Link></li>
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 overflow-y-auto p-8">
-        {children}
-      </main>
+      <div className="flex flex-1 flex-col">
+        <header className="h-20 bg-white border-b flex items-center justify-end px-8">
+          {/* Vous pourrez ajouter ici le nom de l'admin et un bouton de déconnexion */}
+        </header>
+        <main className="flex-1 overflow-y-auto p-8">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
